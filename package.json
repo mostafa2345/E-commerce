@@ -9,8 +9,7 @@
   "scripts": {
     "dev": "nodemon backend/server.js",
     "start": "node backend/server.js",
-    "build":"npm install --prefix frontend && npm run build --prefix frontend ",
-    "serve": "npm run build && vite preview"
+    "build":"npm install && npm install --prefix frontend && npm run build --prefix frontend "
   },
   "dependencies": {
   
