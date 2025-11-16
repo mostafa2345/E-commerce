@@ -11,13 +11,20 @@ const PurchaseSuccess = () => {
     const[isProcessing,setIsProcessing]=useState(true)
     const {clearCart}=useCartStore()
     const [error,setError]=useState(null)
+	const [orderNumber, setOrderNumber] = useState(null);
 	const navigate=useNavigate()
 
     useEffect(()=>{
         const handleCheckoutSuccess=async(sessionId)=>{
             try {
-                await axios.post('/payments/checkout-success',{sessionId})
-                clearCart()
+          const{data}=await axios.post('/payments/checkout-success',{sessionId})
+              if(data.success){
+				setOrderNumber(data.orderNumber)
+				 clearCart()
+			  }else{
+				setError('order Not found ')
+			  }
+	
                 
             } catch (error) {
                 console.log('checkout success error',error.message)
@@ -70,7 +77,7 @@ const PurchaseSuccess = () => {
 					<div className='bg-gray-700 rounded-lg p-4 mb-6'>
 						<div className='flex items-center justify-between mb-2'>
 							<span className='text-sm text-gray-400'>Order number</span>
-							<span className='text-sm font-semibold text-emerald-400'>#12345</span>
+							<span className='text-sm font-semibold text-emerald-400'>{orderNumber}</span>
 						</div>
 						<div className='flex items-center justify-between'>
 							<span className='text-sm text-gray-400'>Estimated delivery</span>

@@ -35,6 +35,11 @@ const orderSchema =  mongoose.Schema(
 			type: String,
 			unique: true,
 		},
+		orderNumber:{
+			type:String,
+			required:true,
+			unique:true,
+		}
 	},
 	{ timestamps: true }
 );

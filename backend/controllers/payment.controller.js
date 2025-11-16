@@ -1,6 +1,7 @@
 import { stripe } from '../lib/stripe.js'
 import Coupon from '../models/coupon.model.js'
 import Order from '../models/order.model.js'
+import { generateOrderNumber } from '../utils/generateOrderNumbers.js'
 export const createCheckoutSession=async(req,res)=>{
     try {
         const {products,couponCode}=req.body
@@ -80,6 +81,7 @@ if(session.payment_status==='paid'){
     }
     const products=JSON.parse(session.metadata.products)
     console.log('products',products)
+    const orderNumber=await generateOrderNumber()
     const newOrder= new Order({
         user:session.metadata.userId,
         products:products.map(p=>({
@@ -88,7 +90,8 @@ if(session.payment_status==='paid'){
             price:p.price
         })),
         totalAmount:session.amount_total/100,
-        stripeSessionId:sessionId
+        stripeSessionId:sessionId,
+        orderNumber:orderNumber
     })
     console.log('new order',newOrder)
     const existingOrder = await Order.findOne({ stripeSessionId: sessionId });
@@ -103,7 +106,8 @@ if (existingOrder) {
     res.status(200).json({
         success:true,
         message:'Payment successful , order created ,and coupon deactivated if used.',
-        orderId:newOrder._id
+        orderId:newOrder._id,
+        orderNumber:orderNumber
 
     })
 }
