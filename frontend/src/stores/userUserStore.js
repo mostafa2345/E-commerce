@@ -55,9 +55,9 @@ logout:async()=>{
  
     try {
           await axios.post('/auth/logout')
-             set({user:null})
+             set({user:null,checkingAuth: false})
     } catch (error) {
-      
+        set({ checkingAuth: false }) 
           toast.error(error.response.data.message||'An error occured')
     }
   
@@ -85,6 +85,9 @@ axios.interceptors.response.use(
     (res)=>res,
     async(error)=>{
         const originalRequest=error.config;
+            if (originalRequest.url.includes("/auth/login")) {
+      return Promise.reject(error);
+    }
         if(error.response?.status===401 && !originalRequest._retry){
             originalRequest._retry=true
             try {

@@ -1,11 +1,11 @@
-import Order from '../models/order.model'
+import Order from '../models/order.model.js'
 
 export async function generateOrderNumber() {
 
     const today=new Date()
     const datePart=today.toISOString().slice(0,10).replace(/-/g,'')
 
-    const count =Order.countDocuments({
+    const count =await Order.countDocuments({
         createdAt:{
             $gte:new Date(today.setHours(0,0,0,0)),
 
