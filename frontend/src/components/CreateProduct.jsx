@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { motion } from "framer-motion";
 import { Loader, PlusCircle, Upload } from "lucide-react";
-import {useProductStore} from '../stores/useProductStore'
+import { useProductStore } from '../stores/useProductStore';
+import { log } from '../utils/logger';
 import toast from "react-hot-toast";
 
 
@@ -20,7 +21,7 @@ const CreateProduct = () => {
       const handleImageChange=(e)=>{
         
         const file=e.target.files[0]
-        console.log(file)
+        log('Selected file:', file.name, 'size:', (file.size / 1024).toFixed(2), 'KB')
       
         if(file){
           const reader=new FileReader()
@@ -43,7 +44,7 @@ const CreateProduct = () => {
          await addProduct(newProduct)
          setNewProduct({ name: "", description: "", price: "", category: "", image: "" });
         } catch(error)  {
-          console.log("error creating a product",error.message);
+          log('Error creating product:', error.message);
         }
        
 

@@ -3,12 +3,14 @@ import Coupon from '../models/coupon.model.js'
 import Order from '../models/order.model.js'
 import User from '../models/user.model.js'
 import { generateOrderNumber } from '../utils/generateOrderNumbers.js'
-export const createCheckoutSession=async(req,res)=>{
-    try {
-        const {products,couponCode}=req.body
+import { log } from '../utils/logger.js'
 
-        if(!Array.isArray(products)||products.length===0){
-            return res.status(400).json({error:'Invalid or empty products array'})
+export const createCheckoutSession = async (req, res) => {
+    try {
+        const { products, couponCode } = req.body
+
+        if (!Array.isArray(products) || products.length === 0) {
+            return res.status(400).json({ error: 'Invalid or empty products array' })
         }
         let totalAmount=0
         const lineItems=products.map(product=>{
@@ -64,7 +66,7 @@ export const createCheckoutSession=async(req,res)=>{
         res.status(200).json({url:session.url,totalAmount:totalAmount/100})
 
     } catch (error) {
-        console.log('create checkout session error',error.message)
+        log('create checkout session error',error.message)
         res.status(500).json({message:'server error',error:error.message})
     }
 }
@@ -116,7 +118,7 @@ if (existingOrder) {
     })
 }
 } catch (error) {
-    console.log('checkout success error',error.message)
+    log('checkout success error',error.message)
     res.status(500).json({message:'server error ',error:error.message})
 }
 
@@ -137,7 +139,7 @@ export const checkoutCancel=async(req,res)=>{
     return res.status(200).json({ message: 'Checkout canceled successfully' });
         
     } catch (error) {
-         console.error('Stripe cancel error:', error.message);
+         log('Stripe cancel error:', error.message);
     return res.status(500).json({ error: 'Failed to cancel checkout session' });
     }
 

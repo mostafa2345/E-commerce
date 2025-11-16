@@ -1,4 +1,5 @@
 import Coupon from "../models/coupon.model.js"
+import { log } from "../utils/logger.js"
 
 export const getCoupon=async(req,res)=>{
     try {
@@ -6,8 +7,7 @@ export const getCoupon=async(req,res)=>{
 
         res.json(coupon||null)
     } catch (error) {
-        console.log('error in the coupon controller',error.message
-        )
+        log('Error in the coupon controller',error.message)
         res.status(500).json({message:'server error ',error:error.message})
     }
 }
@@ -30,7 +30,7 @@ export const validateCoupon=async(req,res)=>{
         discountPercentage:coupon.discountPercentage
     })
     } catch (error) {
-        console.log('validate coupon controller error ',error.message)
+        log('Error in validate coupon controller:', error.message)
         res.status(500).json({message:'server error',error:error.message})
     }
 }

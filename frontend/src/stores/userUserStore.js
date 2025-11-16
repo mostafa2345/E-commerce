@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from '../lib/axios'
+import { log } from '../utils/logger'
 import {toast} from 'react-hot-toast'
 
 
@@ -44,7 +45,7 @@ checkAuth:async()=>{
     set({checkingAuth:true})
     try {
         const res =await axios.get('/auth/profile')
-       console.log(res)
+       log('User profile response:', res.data)
         set({user:res.data,checkingAuth:false})
     } catch  {
         set({checkingAuth:false,user:null})
@@ -64,14 +65,14 @@ logout:async()=>{
 
 },
 refreshToken:async()=>{
-    console.log('start refrsh token')
+    log('Starting token refresh')
     if(get().checkingAuth) return refreshPromise
    
     set({checkingAuth:true})
     try {
    const res= await axios.post('/auth/refresh-token')
    set({checkingAuth:false})
-        console.log(res)
+        log('User profile response:', res.data)
     return res.data
    
     } catch (error) {

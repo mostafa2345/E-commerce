@@ -1,15 +1,14 @@
-
 import { redis } from "../lib/redis.js"
 import Product from "../models/product.model.js"
 import cloudinary from "../lib/cloudinary.js"
-
+import { log } from '../utils/logger.js'
 
 export const getAllProducts=async(req,res)=>{
 try {
     const products=await Product.find()
     res.status(200).json(products)
 } catch (error) {
-    console.log(' get all products error')
+    log('Error getting all products:', error.message)
     res.status(500).json({
         message:error.message,
 
@@ -31,7 +30,7 @@ export const getFeaturedProducts=async(req,res)=>{
        await redis.set('featuredProducts',JSON.stringify(featuredProducts))
        res.json(featuredProducts)
     } catch (error) {
-        console.log('get featured products error')
+        log('Error getting featured products:', error.message)
         res.status(500).json({
             message:error.message
         })
@@ -46,7 +45,7 @@ export const createProduct = async (req, res) => {
 		if (image) {
 			cloudinaryResponse = await cloudinary.uploader.upload(image, { folder: "products" });
 		}
-            console.log(cloudinaryResponse?.secure_url)
+            log('Cloudinary upload successful:', cloudinaryResponse?.secure_url)
 		const product = await Product.create({
 			name,
 			description,
@@ -72,9 +71,9 @@ export const deleteProduct=async(req,res)=>{
             const public_id=product.img.split('/').pop().split('.')[0]
             try {
                 await cloudinary.uploader.destroy(`products/${public_id}`)
-                console.log('img deleted from cloduinary')
+                log('Image deleted from Cloudinary successfully')
             } catch (error) {
-                console.log('error deleting img from cloudinary',error)
+                log('Error deleting image from Cloudinary:', error.message)
 
             }
            
@@ -85,7 +84,7 @@ export const deleteProduct=async(req,res)=>{
         res.status(200).json('Product deleted successfully')
         
     } catch (error) {
-        console.log('delete product error')
+        log('Error deleting product:', error.message)
         res.status(500).json({
             message:error.message
         })
@@ -109,7 +108,7 @@ export const getRecommendedProducts=async(req,res)=>{
         ])
         res.status(200).json(products)
     } catch (error) {
-        console.log('get recommended products error')
+        log('Error getting recommended products:', error.message)
         res.status(500).json({
             message:error.message
         })
@@ -124,7 +123,7 @@ try {
     }
     res.status(200).json(products)
 } catch (error) {
-    console.log('get products by category error')
+    log('Error getting products by category:', error.message)
     res.status(500).json({
         message:error.message
     })
@@ -146,7 +145,7 @@ export const toggleFeaturedProduct=async(req,res)=>{
       }
         
     } catch (error) {
-        console.log('toggle featured product error')
+        log('Error toggling featured product:', error.message)
         res.status(500).json({
             message:error.message
         })
@@ -159,7 +158,7 @@ async function updateFeaturedProductsCache() {
             await redis.set('featuredProducts',JSON.stringify(featuredProducts))
         }
     } catch (error) {
-        console.log('update featured products cache error')
+        log('Error updating featured products cache:', error.message)
         
     }
 }

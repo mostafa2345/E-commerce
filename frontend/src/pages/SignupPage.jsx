@@ -15,10 +15,6 @@ const SignupPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         signup(formData)
-		
-		console.log(user)
-		console.log(formData)
-     
     };
   return (
     <div className='flex flex-col justify-center py-12 sm:px-6 lg:px-8'>

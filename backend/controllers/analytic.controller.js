@@ -1,5 +1,6 @@
 import Order from "../models/order.model.js"
 import Product from "../models/product.model.js"
+import { log } from '../utils/logger.js'
 import User from "../models/user.model.js"
 
 export const getAnalyticsData=async()=>{
@@ -27,7 +28,7 @@ return {
     totalRevenue
 }
     } catch (error) {
-        console.log('get analytics data function error',error.message)
+        log('Error in getAnalyticsData function:', error.message)
         throw error
     }
 

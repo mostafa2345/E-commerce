@@ -1,5 +1,6 @@
-
+import User from '../models/user.model.js'
 import Product from '../models/product.model.js'
+import { log } from '../utils/logger.js'
 export const addToCart=async(req,res)=>{
 
     try {
@@ -34,7 +35,7 @@ user.cartItems = user.cartItems.filter(item => item._id.toString() !== id);
         await user.save()
           res.json(user.cartItems)
     } catch (error) {
-        console.log('remove all from cart error ',error.message)
+        log('Error removing all from cart:', error.message)
         res.status(500).json({message:'server error ',error:error.message})
     }
 }
@@ -62,7 +63,7 @@ export const  updateQuantity=async(req,res)=>{
    
    
     } catch (error) {
-        console.log('update quantity controller error ' ,error.message)
+        log('Error updating cart item quantity:', error.message)
         res.status(500).json({message:'server error',error:error.message})
     }
 }
@@ -80,7 +81,7 @@ export const getCartProducts=async(req,res)=>{
            
         res.json(cartItems)
     } catch (error) {
-         console.log('get cart products  controller error ' ,error.message)
+         log('Error getting cart products:', error.message)
         res.status(500).json({message:'server error',error:error.message}) 
     }
 }
