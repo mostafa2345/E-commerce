@@ -1,8 +1,7 @@
-import { create } from 'zustand'
-import axios from '../lib/axios'
-import { log } from '../utils/logger.js'
+import { create } from "zustand";
+import axios from "../lib/axios";
 import toast from "react-hot-toast";
-
+import {log} from '../utils/logger'
 import axiosInstance from "../lib/axios";
 
 export const useCartStore=create((set,get)=>({
