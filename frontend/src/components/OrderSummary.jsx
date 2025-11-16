@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import {loadStripe} from '@stripe/stripe-js'
 import axiosInstance from "../lib/axios";
 
-const stripePromise=loadStripe('pk_test_51NdKrUDOQJezW070DO9LroR5YVenJoLdVbyPMrvTIGPdgcHVAeLroy7D54DH4HtWQ1FO92jUaIUFImWP0DzDLo7b00sslsR0eG')
+
 const OrderSummary = () => {
     const {cart,coupon,total,subtotal,isCouponApplied}=useCartStore()
     const savings = subtotal - total;
@@ -13,8 +13,11 @@ const OrderSummary = () => {
 	const formattedTotal = total.toFixed(2);
 	const formattedSavings = savings.toFixed(2);
 	const handlePayment=async()=>{
-		
-	const res=	await axiosInstance.post('/payments/create-checkout-session',{products:cart,couponCode:coupon?coupon.code:null})
+	const payload={
+		products:cart,
+		couponCode:isCouponApplied&&coupon?coupon.code:null
+	}
+	const res=	await axiosInstance.post('/payments/create-checkout-session',payload)
 	 const sessionUrl=res.data.url
 	 console.log(sessionUrl)
 	
