@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import axios from '../lib/axios'
-import { log } from '../utils/logger'
+import { log } from '../utils/logger.js'
 import toast from "react-hot-toast";
 
 import axiosInstance from "../lib/axios";
