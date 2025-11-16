@@ -1,7 +1,9 @@
 import User from '../models/user.model.js'
 import jwt from 'jsonwebtoken'
+import { log } from '../utils/logger.js'
 import { redis } from '../lib/redis.js'
 import Profile from '../models/profile.model.js';
+
 const generateTokens = (userId) => {
 	const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
 		expiresIn: "15m",
@@ -84,7 +86,7 @@ try {
 
   
 } catch (error) {
-	console.log('error in the login controller')
+	log('Error in login controller:', error.message)
 	res.status(500).json('internal server error',error.message)
 	
 }
@@ -101,7 +103,7 @@ export const logOutController=async(req,res)=>{
 		res.clearCookie("refreshToken");
 		res.json({ message: "Logged out successfully" });
 	} catch (error) {
-		console.log("Error in logout controller", error.message);
+		log("Error in logout controller:", error.message);
 		res.status(500).json({ message: "Server error", error: error.message });
 	}
 }
@@ -128,7 +130,7 @@ try {
 	res.json({message:'Token refreshed successfully'})
 
 } catch (error) {
-	console.log('error in refresh token')
+	log('Error refreshing token:', error.message)
 	res.status(500).json({message:'server error ',error:error.message})
 }
 }
@@ -139,7 +141,7 @@ export const getProfile=async(req,res)=>{
 		res.status(200).json(req.user)
 
 	} catch (error) {
-		console.log('error in getProfile controller')
+		log('Error in getProfile controller:', error.message)
 		res.status(500).json({message:error.message})
 	}
 }

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {loadStripe} from '@stripe/stripe-js'
 import axiosInstance from "../lib/axios";
-
+import { log } from '../utils/logger';
 
 const OrderSummary = () => {
     const {cart,coupon,total,subtotal,isCouponApplied}=useCartStore()
@@ -19,12 +19,12 @@ const OrderSummary = () => {
 	}
 	const res=	await axiosInstance.post('/payments/create-checkout-session',payload)
 	 const sessionUrl=res.data.url
-	 console.log(sessionUrl)
+	 log('Stripe session URL:', sessionUrl)
 	
 	if (sessionUrl?.startsWith('https://checkout.stripe.com')) {
   window.location.href = sessionUrl;
 } else {
-  console.error('Invalid Stripe session URL');
+  log('Error: Invalid Stripe session URL');
 }
 	}
   return (

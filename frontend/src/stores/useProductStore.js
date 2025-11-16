@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "../lib/axios";
+import { log } from '../utils/logger';
 import toast from "react-hot-toast";
 
 
@@ -11,7 +12,7 @@ export const useProductStore=create((set,get)=>({
         set({loading:true})
         try {
             const res=await axios.get('/products')
-             console.log(res)
+             log('Fetched products:', res.data.length, 'items')
             set({products:res.data,loading:false})
         } catch (error) {
             set({loading:false})
@@ -33,9 +34,9 @@ export const useProductStore=create((set,get)=>({
     addProduct:async(productData)=>{
             set({loading:true})
             try {
-                console.log(productData)
+                log('Adding new product:', productData)
            const res= await axios.post('/products',productData)
-           console.log(res)
+           log('Product added successfully:', res.data)
            set((prevstate)=>({
             products:[...prevstate.products,res.data],
             loading:false

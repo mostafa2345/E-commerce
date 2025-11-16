@@ -1,5 +1,6 @@
-import { create } from "zustand";
-import axios from "../lib/axios";
+import { create } from 'zustand'
+import axios from '../lib/axios'
+import { log } from '../utils/logger'
 import toast from "react-hot-toast";
 
 import axiosInstance from "../lib/axios";
@@ -16,7 +17,7 @@ export const useCartStore=create((set,get)=>({
             const res=await axiosInstance.get('/coupons')
             set({coupon:res.data})
         } catch (error) {
-            console.error('error fetching coupon',error)
+            log('Error fetching coupon:', error.message)
             
         }
     },
@@ -47,7 +48,7 @@ export const useCartStore=create((set,get)=>({
     getCartItems:async()=>{
         try {
             const res=await axios.get('/cart')
-            console.log(res)
+            log('Fetched cart items:', res.data.length, 'items')
             set({cart:res.data})
              get().calcTotals()
         } catch (error) {
