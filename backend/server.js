@@ -8,7 +8,9 @@ import couponRoutes from '../backend/routes/coupon.route.js'
 import paymentRoutes from '../backend/routes/payment.route.js'
 import analyticsRoutes from '../backend/routes/analytic.route.js'
 import cookieParser from 'cookie-parser'
+
 import path from 'path'
+import { log } from './utils/logger.js'
 dotenv.config()
 const app=express()
 
